@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Chat</string>
+    <string name="room_title">J.A.R.V.I.S
+        \nTourist Guide
+    </string>
+    <string name="type_a_message">Type a Message</string>
+    <string name="send_button_label">Send</string>
+    <string name="info">
+        J.A.R.V.I.S (Just A Rather Very Intelligent Service) is an AI-powered virtual assistant designed to enhance user experience by providing intelligent response acting as a tourist guide.
+        \nJ.A.R.V.I.S can help you discover nearby places of interest, provide recommendations, and answer questions about local attractions.
+        \nFeel free to ask J.A.R.V.I.S about restaurants, landmarks, events and more.
+        \nYour conversation history lasts for 2 days.
+    </string>
+    <string name="thinking">Thinking…</string>
+    <string name="error_message">Oops! Something went wrong. Please try again.</string>
+</resources>
