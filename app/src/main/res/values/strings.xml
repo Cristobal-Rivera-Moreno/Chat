@@ -7,7 +7,7 @@
     <string name="send_button_label">Send</string>
     <string name="info">
         J.A.R.V.I.S (Just A Rather Very Intelligent Service) is an AI-powered virtual assistant designed to enhance user experience by providing intelligent response acting as a tourist guide.
-        \nJ.A.R.V.I.S can help you discover nearby places of interest, provide recommendations, and answer questions about local attractions.
+        \nJ.A.R.V.I.S can help you discover nearby places (in a radius of around 1000m)  of interest, provide recommendations, and answer questions about local attractions.
         \nFeel free to ask J.A.R.V.I.S about restaurants, landmarks, events and more.
         \nYour conversation history lasts for 1 day.
     </string>
