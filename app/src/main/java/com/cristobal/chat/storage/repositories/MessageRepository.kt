@@ -30,9 +30,15 @@ class MessageRepository(context: Context) {
         }
     }
 
-    suspend fun deleteMessage(message: Message): Result<Unit> {
+    suspend fun deleteExpiredMessages(): Result<Unit> {
         return try {
-            messageDao.delete(message)
+            getAllMessages().onSuccess { flow ->
+                flow.collect { msgs ->
+                    if (msgs.getOrNull(0)?.timestamp?.let { it  < System.currentTimeMillis() - 24 * 60 * 60 * 1000} == true) {
+                        messageDao.deleteAll(*msgs.toTypedArray())
+                    }
+                }
+            }
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e(obTag, "Error deleting message: ${e.message}")

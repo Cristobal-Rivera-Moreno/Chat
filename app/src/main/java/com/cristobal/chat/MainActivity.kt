@@ -15,8 +15,14 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.withResumed
 import com.cristobal.chat.components.ChatRoomView
+import com.cristobal.chat.storage.repositories.MessageRepository
 import com.cristobal.chat.ui.theme.ChatTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -25,7 +31,9 @@ import kotlin.random.Random
 class MainActivity : ComponentActivity() {
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            // Handle permission result if needed
+            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == false && permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == false) {
+                finish()
+            }
         }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +49,14 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                     )
                 }
+            }
+        }
+
+        lifecycleScope.launch (Dispatchers.IO) {
+            lifecycle.repeatOnLifecycle( androidx.lifecycle.Lifecycle.State.RESUMED) {
+                MessageRepository(
+                    applicationContext
+                ).deleteExpiredMessages()
             }
         }
     }

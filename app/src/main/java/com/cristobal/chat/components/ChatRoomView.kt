@@ -49,6 +49,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cristobal.chat.R
 import com.cristobal.chat.models.Message
+import com.cristobal.chat.utils.AppUtils
 import com.cristobal.chat.viewmodels.ChatRoomsViewModel
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
@@ -88,6 +89,7 @@ private fun BuildView(
         modifier = modifier
             .background(Color.Black)
     ) {
+        if (!AppUtils.isLandscape)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -98,7 +100,9 @@ private fun BuildView(
             )
 
             InfoIcon (
-                modifier = Modifier.align(Alignment.CenterEnd),
+                modifier = Modifier.align(
+                    Alignment.CenterEnd
+                ),
                 onInfoIconClick = onInfoIconClick
             )
         }
@@ -117,7 +121,8 @@ private fun BuildView(
 
             TypingBox(
                 onSend = onSend,
-                isJarvisThinking = isJarvisThinking
+                isJarvisThinking = isJarvisThinking,
+                onInfoIconClick = onInfoIconClick
             )
         }
     }
@@ -208,13 +213,13 @@ private fun MessageList(
         }
     }
     LazyColumn(
-        state = listState,
         modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(bottom = 8.dp)
+            .padding(bottom = 8.dp),
+        state = listState
     ) {
-        items(messages) { message ->
+        items(messages, key = {it.id}) { message ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = if (isMsgMine(message.role)) Arrangement.End else Arrangement.Start
@@ -247,7 +252,7 @@ private fun MessageList(
                         ) {
                             if (!isMsgMine(message.role))
                                 Text(
-                                    text = message.role,
+                                    text = stringResource(R.string.jarvis_name),
                                     color = colorResource(R.color.light_purple),
                                     style = MaterialTheme.typography.labelSmall,
                                     modifier = Modifier.align(Alignment.Top)
@@ -298,7 +303,9 @@ private fun MessageList(
 private fun TypingBox(
     modifier: Modifier = Modifier,
     onSend: (String) -> Unit = {},
-    isJarvisThinking: Boolean = false
+    isJarvisThinking: Boolean = false,
+    onInfoIconClick: (Boolean) -> Unit = {}
+
 ) {
     var input by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -311,12 +318,22 @@ private fun TypingBox(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
+        if (AppUtils.isLandscape)
+            InfoIcon (
+                onInfoIconClick = onInfoIconClick
+            )
+
         Box(
             modifier = Modifier
                 .wrapContentWidth()
                 .height(70.dp)
                 .padding(vertical = 10.dp)
-                .background(Color(0xFF23272F), RoundedCornerShape(8.dp))
+                .border(
+                    0.2.dp,
+                    colorResource(R.color.primary),
+                    RoundedCornerShape(8.dp)
+                )
+                .background(Color(0xFF23272F))
                 .fillMaxWidth(0.83f)
         ) {
             BasicTextField(
